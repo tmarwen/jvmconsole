@@ -4,13 +4,13 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-<!--
-  <parent>
-    <groupId>org.exoplatform.addons</groupId>
-    <artifactId>addons-parent-pom</artifactId>
-    <version>4</version>
-  </parent>
--->
+  <!--
+    <parent>
+      <groupId>org.exoplatform.addons</groupId>
+      <artifactId>addons-parent-pom</artifactId>
+      <version>4</version>
+    </parent>
+  -->
 
   <groupId>org.exoplatform.addons.jvmconsole</groupId>
   <artifactId>parent-pom</artifactId>
@@ -38,8 +38,11 @@
     <tomcat7.plugin.version>2.2</tomcat7.plugin.version>
     <compiler.plugin.version>2.5.1</compiler.plugin.version>
     <war.plugin.version>2.4</war.plugin.version>
+    <jrebel.plugin.version>1.1.5</jrebel.plugin.version>
     <maven.compiler.target>1.6</maven.compiler.target>
     <maven.compiler.source>1.6</maven.compiler.source>
+    <jvmconsole.project.root>${project.basedir}</jvmconsole.project.root>
+
   </properties>
 
   <dependencyManagement>
@@ -54,30 +57,28 @@
         <scope>import</scope>
       </dependency>
 
+      <!--
 
-<!--
+            &lt;!&ndash; Should be kept commented until org.gatein.pc:pc-api dependency version is resolved &ndash;&gt;
+            <dependency>
+              <groupId>org.exoplatform.platform</groupId>
+              <artifactId>platform</artifactId>
+              <version>${exoplatfrom.version}</version>
+              <type>pom</type>
+              <scope>import</scope>
+              <exclusions>
+                <exclusion>
+                  <artifactId>pc-api</artifactId>
+                  <groupId>org.gatein.pc</groupId>
+                </exclusion>
+                <exclusion>
+                  <artifactId>common-logging</artifactId>
+                  <groupId>org.gatein.common</groupId>
+                </exclusion>
+              </exclusions>
+            </dependency>
 
-      &lt;!&ndash; Should be kept commented until org.gatein.pc:pc-api dependency version is resolved &ndash;&gt;
-      <dependency>
-        <groupId>org.exoplatform.platform</groupId>
-        <artifactId>platform</artifactId>
-        <version>${exoplatfrom.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-        <exclusions>
-          <exclusion>
-            <artifactId>pc-api</artifactId>
-            <groupId>org.gatein.pc</groupId>
-          </exclusion>
-          <exclusion>
-            <artifactId>common-logging</artifactId>
-            <groupId>org.gatein.common</groupId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-
--->
-
+      -->
 
       <!-- Application dependencies-->
       <dependency>
@@ -90,7 +91,6 @@
         <artifactId>juzu-plugins-servlet</artifactId>
         <version>${org.juzu.version}</version>
       </dependency>
-
 
       <!-- Servlet 3.x API -->
       <dependency>
@@ -168,6 +168,36 @@
             <fork>true</fork>
           </configuration>
         </plugin>
+
+        <plugin>
+          <groupId>org.zeroturnaround</groupId>
+          <artifactId>jrebel-maven-plugin</artifactId>
+          <version>${jrebel.plugin.version}</version>
+          <executions>
+            <execution>
+              <id>generate-rebel-xml</id>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>generate</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <rootPath>${jvmconsole.project.root}</rootPath>
+            <classpath>
+              <!-- Include Generated annotation directory -->
+              <resources>
+                <resource>
+                  <directory>${project.build.directory}/generated-sources</directory>
+                  <includes>
+                    <include>annotations/**</include>
+                  </includes>
+                </resource>
+              </resources>
+            </classpath>
+          </configuration>
+        </plugin>
+
       </plugins>
     </pluginManagement>
   </build>
@@ -179,20 +209,26 @@
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
+      <properties>
+        <!-- JRebel Property to print generated rebel.xml files for each build -->
+        <rebel.generate.show>true</rebel.generate.show>
+      </properties>
       <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.tomcat.maven</groupId>
-              <artifactId>tomcat7-maven-plugin</artifactId>
-              <configuration>
-                <systemProperties>
-                  <juzu.run_mode>prod</juzu.run_mode>
-                </systemProperties>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.tomcat.maven</groupId>
+            <artifactId>tomcat7-maven-plugin</artifactId>
+            <configuration>
+              <systemProperties>
+                <juzu.run_mode>prod</juzu.run_mode>
+              </systemProperties>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.zeroturnaround</groupId>
+            <artifactId>jrebel-maven-plugin</artifactId>
+          </plugin>
+        </plugins>
       </build>
     </profile>
 
@@ -214,6 +250,7 @@
         </pluginManagement>
       </build>
     </profile>
+
   </profiles>
 
 </project>

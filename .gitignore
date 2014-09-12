@@ -25,6 +25,9 @@ target/
 *.ipr
 .idea/
 
+# JRebel Configuration files
+rebel.xml
+
 # eclipse project file
 .settings/
 .classpath
