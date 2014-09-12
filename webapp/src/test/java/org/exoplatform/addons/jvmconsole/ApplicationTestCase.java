@@ -17,6 +17,7 @@
 package org.exoplatform.addons.jvmconsole;
 
 import juzu.arquillian.Helper;
+import org.exoplatform.addons.jvmconsole.service.MockService;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
@@ -54,6 +55,6 @@ public class ApplicationTestCase {
   public void testFoo() {
     driver.get(deploymentURL.toString());
     WebElement body = driver.findElement(By.tagName("body"));
-    assertEquals("Not ready yet... Wait for an upcoming release :)", body.getText());
+    assertEquals(MockService.getApplicationName() + " not ready yet! Wait for an upcoming release :)", body.getText());
   }
 }

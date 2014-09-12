@@ -17,9 +17,9 @@
 package org.exoplatform.addons.jvmconsole;
 
 import juzu.Path;
-import juzu.View;
 import juzu.Response;
-import juzu.template.Template;
+import juzu.View;
+import org.exoplatform.addons.jvmconsole.service.MockService;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -28,10 +28,12 @@ public class Controller {
 
   @Inject
   @Path("index.gtmpl")
-  Template index;
+  org.exoplatform.addons.jvmconsole.templates.index index;
 
   @View
   public Response.Content index() throws IOException {
-    return index.ok();
+    return index.with()
+        .name(MockService.getApplicationName())
+        .ok();
   }
 }
