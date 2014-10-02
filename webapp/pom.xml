@@ -5,8 +5,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.exoplatform.addons.jvmconsole</groupId>
     <artifactId>parent-pom</artifactId>
+    <groupId>org.exoplatform.addons.jvmconsole</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 

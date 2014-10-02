@@ -24,6 +24,7 @@
 
   <modules>
     <module>webapp</module>
+    <module>core</module>
   </modules>
 
   <properties>
@@ -33,6 +34,11 @@
 
     <!-- Juzu Dependencies versions -->
     <org.juzu.version>1.0.0-cr1</org.juzu.version>
+
+    <!-- Core Module Dependencies Versions -->
+    <exo.ws.rest.core.version>2.4.1-GA</exo.ws.rest.core.version>
+    <jsr311-api.version>1.0</jsr311-api.version>
+    <jmxterm.version>1.0-alpha-4</jmxterm.version>
 
     <!-- Maven Plugins Properties -->
     <tomcat7.plugin.version>2.2</tomcat7.plugin.version>
@@ -130,6 +136,25 @@
         <artifactId>juzu-depchain-arquillian-tomcat7</artifactId>
         <version>${org.juzu.version}</version>
         <scope>test</scope>
+      </dependency>
+
+      <!-- Core Module Dependencies -->
+      <dependency>
+        <groupId>org.exoplatform.ws</groupId>
+        <artifactId>exo.ws.rest.core</artifactId>
+        <version>${exo.ws.rest.core.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.ws.rs</groupId>
+        <artifactId>jsr311-api</artifactId>
+        <version>${jsr311-api.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.cyclopsgroup</groupId>
+        <artifactId>jmxterm</artifactId>
+        <version>${jmxterm.version}</version>
       </dependency>
 
     </dependencies>
